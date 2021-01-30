@@ -38,103 +38,122 @@
     </tab-content>
     <tab-content title="List of Players">
       <div class="form-group">
-        <label for="playerName">Name</label>
-        <input
-            id="playerName"
-            type="text"
+        <label for="players">Select Player</label>
+        <select
+            id="players"
+            :class="hasError('playerId') ? 'is-invalid' : ''"
             class="form-control"
-            :class="hasError('playerName') ? 'is-invalid' : ''"
-            placeholder="Player name"
-            v-model="formData.playerName"
-        >
-        <div v-if="hasError('playerName')" class="invalid-feedback">
-          <div
-              class="error"
-              v-if="!$v.formData.playerName.required">Please provide a valid player name.
+            v-model="formData.playerId">
+          <option v-for="player in players" :key="player.id">{{ player.name }} {{ player.surname }}</option>
+        </select>
+        <div v-if="hasError('playerId')" class="invalid-feedback">
+          <div class="error" v-if="!$v.formData.playerId.required">Please select on of the fields.</div>
+        </div>
+      </div>
+
+      <div v-if="isSaveButton">
+        <hr/>
+        <h1>Player Form</h1>
+        <div class="form-group">
+          <label for="playerName">Name</label>
+          <input
+              id="playerName"
+              type="text"
+              class="form-control"
+              :class="hasError('playerName') ? 'is-invalid' : ''"
+              placeholder="Player name"
+              v-model="formData.playerName"
+          >
+          <div v-if="hasError('playerName')" class="invalid-feedback">
+            <div
+                class="error"
+                v-if="!$v.formData.playerName.required">Please provide a valid player name.
+            </div>
           </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="surname">Surname</label>
-        <input
-            id="surname"
-            type="text"
-            class="form-control"
-            :class="hasError('surname') ? 'is-invalid' : ''"
-            placeholder="Enter Surname"
-            v-model="formData.surname"
-        >
-        <div v-if="hasError('surname')" class="invalid-feedback">
-          <div
-              class="error"
-              v-if="!$v.formData.surname.required"
-          >Please provide a valid surname.
+        <div class="form-group">
+          <label for="surname">Surname</label>
+          <input
+              id="surname"
+              type="text"
+              class="form-control"
+              :class="hasError('surname') ? 'is-invalid' : ''"
+              placeholder="Enter Surname"
+              v-model="formData.surname"
+          >
+          <div v-if="hasError('surname')" class="invalid-feedback">
+            <div
+                class="error"
+                v-if="!$v.formData.surname.required"
+            >Please provide a valid surname.
+            </div>
           </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="gender">Gender</label>
-        <select
-            id="gender"
-            :class="hasError('gender') ? 'is-invalid' : ''"
-            class="form-control"
-            v-model="formData.gender">
-          <option value="MALE">Male</option>
-          <option value="FEMALE">Female</option>
-        </select>
-        <div v-if="hasError('gender')" class="invalid-feedback">
-          <div class="error" v-if="!$v.formData.gender.required">Please select on of the fields.</div>
+        <div class="form-group">
+          <label for="gender">Gender</label>
+          <select
+              id="gender"
+              :class="hasError('gender') ? 'is-invalid' : ''"
+              class="form-control"
+              v-model="formData.gender">
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+          </select>
+          <div v-if="hasError('gender')" class="invalid-feedback">
+            <div class="error" v-if="!$v.formData.gender.required">Please select on of the fields.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="birthDate">Birth date</label>
+          <input
+              id="birthDate"
+              type="date"
+              class="form-control"
+              :class="hasError('birthDate') ? 'is-invalid' : ''"
+              placeholder="Enter birthDate"
+              v-model="formData.birthDate">
+          <div v-if="hasError('birthDate')" class="invalid-feedback">
+            <div class="error" v-if="!$v.formData.birthDate.required">Please select on of the fields.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="city">City</label>
+          <select
+              id="city"
+              :class="hasError('city') ? 'is-invalid' : ''"
+              class="form-control"
+              v-model="formData.city">
+            <option v-for="city in cities" :key="city.id" v-bind:value="city.id">{{ city.name }}</option>
+          </select>
+          <div v-if="hasError('city')" class="invalid-feedback">
+            <div class="error" v-if="!$v.formData.city.required">Please select on of the fields.</div>
+          </div>
+        </div>
+        <div class="form-group form-check">
+          <input
+              id="flag"
+              type="checkbox"
+              :class="hasError('flag') ? 'is-invalid' : ''"
+              class="form-check-input"
+              v-model="formData.flag"
+          >
+          <label class="form-check-label">Flag</label>
+          <div v-if="hasError('flag')" class="invalid-feedback">
+            <div class="error" v-if="!$v.formData.flag.required">Please select terms and conditions.</div>
+          </div>
+        </div>
+        <div class="form-group" v-if="isSaveButton">
+          <i class="material-icons" style="font-size:45px;color:green; margin-left: 380px; cursor: pointer"
+             v-on:click="savePlayer()">save</i>
+          <i class="material-icons" style="font-size:45px;color:red; cursor: pointer"
+             v-on:click="cancelPlayer()">cancel</i>
         </div>
       </div>
-      <div class="form-group">
-        <label for="birthDate">Birth date</label>
-        <input
-            id="birthDate"
-            type="date"
-            class="form-control"
-            :class="hasError('birthDate') ? 'is-invalid' : ''"
-            placeholder="Enter birthDate"
-            v-model="formData.birthDate">
-        <div v-if="hasError('birthDate')" class="invalid-feedback">
-          <div class="error" v-if="!$v.formData.birthDate.required">Please select on of the fields.</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="city">City</label>
-        <select
-            id="city"
-            :class="hasError('city') ? 'is-invalid' : ''"
-            class="form-control"
-            v-model="formData.city">
-          <option v-for="city in cities" :key="city.id" v-bind:value="city.id">{{ city.name }}</option>
-        </select>
-        <div v-if="hasError('city')" class="invalid-feedback">
-          <div class="error" v-if="!$v.formData.city.required">Please select on of the fields.</div>
-        </div>
-      </div>
-      <div class="form-group form-check">
-        <input
-            id="flag"
-            type="checkbox"
-            :class="hasError('flag') ? 'is-invalid' : ''"
-            class="form-check-input"
-            v-model="formData.flag"
-        >
-        <label class="form-check-label">Flag</label>
-        <div v-if="hasError('flag')" class="invalid-feedback">
-          <div class="error" v-if="!$v.formData.flag.required">Please select terms and conditions.</div>
-        </div>
-      </div>
-      <div class="form-group" v-if="isSaveButton">
-        <i class="material-icons" style="font-size:45px;color:green; margin-left: 380px; cursor: pointer"
-           v-on:click="savePlayer()">save</i>
-        <i class="material-icons" style="font-size:45px;color:red; cursor: pointer"
-           v-on:click="cancelPlayer()">cancel</i>
-      </div>
+
       <div class="form-group">
         <button type="button" style="margin-top: 50px;" v-on:click="getAllPlayers()">Show Records</button>
         <button v-if="!isSaveButton" v-on:click="createPlayer()">Player Create</button>
-        <table class="table" v-if="players.length>0">
+        <table class="table" v-if="isSyncShowRecords">
           <thead>
           <tr>
             <th scope="col">#</th>
@@ -241,6 +260,7 @@ export default {
         name: '',
         description: '',
         logo: null,
+        playerId: null,
         playerName: null,
         surname: null,
         gender: null,
@@ -257,12 +277,7 @@ export default {
           description: {required} // TODO savur => buraya logo gelecektir.
         },
         {
-          playerName: {required},
-          surname: {required},
-          gender: {required},
-          birthDate: {required},
-          city: {required},
-          flag: {required}
+          playerId: {required}
         },
         {
           actionName: {required},
@@ -357,11 +372,13 @@ export default {
       if (dto.id) {
         editPlayer(this.formData.id, dto).then(response => {
           console.log(response);
+          this.isSaveButton = false;
           this.getAllPlayers();
         });
       } else {
         createPlayer(dto).then(response => {
           console.log(response);
+          this.isSaveButton = false;
           this.getAllPlayers();
         });
       }
@@ -381,6 +398,9 @@ export default {
   },
 
   created() {
+    getAllPlayers().then(response => {
+      this.players = response.data['data']['players'];
+    });
     getAllCities().then(response => {
       this.cities = response.data['data']['cities'];
     });
