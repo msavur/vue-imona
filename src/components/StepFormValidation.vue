@@ -153,6 +153,9 @@
       </div>
 
       <div class="form-group" style="padding-top: 40px;">
+        <div  class="alert alert-success" role="alert" v-if="isPlayerSuccess">
+          The player has been successfully saved. <a href="#" v-on:click="closeMessage()" class="alert-link">Close</a>
+        </div>
         <a type="button" class="btn btn-primary" v-on:click="getAllPlayers()">Show Records</a>
         <a v-if="!isSaveButton" class="btn btn-primary"  v-on:click="createPlayer()"><b>Player Create</b></a>
         <table class="table" v-if="isSyncShowRecords">
@@ -290,7 +293,8 @@ export default {
       players: [],
       cities: [],
       isSaveButton: false,
-      isSyncShowRecords: false
+      isSyncShowRecords: false,
+      isPlayerSuccess: false
     };
   },
   methods: {
@@ -370,12 +374,14 @@ export default {
           console.log(response);
           this.isSaveButton = false;
           this.getAllPlayers();
+          this.isPlayerSuccess = true;
         });
       } else {
         createPlayer(dto).then(response => {
           console.log(response);
           this.isSaveButton = false;
           this.getAllPlayers();
+          this.isPlayerSuccess = true;
         });
       }
 
@@ -390,6 +396,10 @@ export default {
       this.formData.flag = false;
       this.formData.gender = null;
       this.formData.city = null;
+    },
+
+    closeMessage(){
+      this.isPlayerSuccess = false;
     }
   },
 
