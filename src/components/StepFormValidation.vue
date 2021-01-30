@@ -44,7 +44,9 @@
             :class="hasError('playerId') ? 'is-invalid' : ''"
             class="form-control"
             v-model="formData.playerId">
-          <option v-for="player in players" :key="player.id">{{ player.name }} {{ player.surname }}</option>
+          <option v-for="player in players" :key="player.id" v-bind:value="player.id">{{ player.name }}
+            {{ player.surname }}
+          </option>
         </select>
         <div v-if="hasError('playerId')" class="invalid-feedback">
           <div class="error" v-if="!$v.formData.playerId.required">Please select on of the fields.</div>
@@ -150,9 +152,9 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <button type="button" style="margin-top: 50px;" v-on:click="getAllPlayers()">Show Records</button>
-        <button v-if="!isSaveButton" v-on:click="createPlayer()">Player Create</button>
+      <div class="form-group" style="padding-top: 40px;">
+        <a type="button" class="btn btn-primary" v-on:click="getAllPlayers()">Show Records</a>
+        <a v-if="!isSaveButton" class="btn btn-primary"  v-on:click="createPlayer()"><b>Player Create</b></a>
         <table class="table" v-if="isSyncShowRecords">
           <thead>
           <tr>
@@ -300,7 +302,9 @@ export default {
           description: this.formData.description,
           logo: ''
         },
-        player: null,
+        player: {
+          playerId: this.formData.playerId
+        },
         action: {
           name: this.formData.actionName,
           description: this.formData.actionDescription,
@@ -309,17 +313,9 @@ export default {
       }
       createGame(dto).then(response => {
         console.log(response);
-        this.resetForm();
       });
     },
 
-    resetForm() {
-      console.log('Reseting the form')
-      var self = this;
-      Object.keys(this.data.formData).forEach(function (key) {
-        self.data.formData[key] = '';
-      });
-    },
 
     onFileChanged(event) {
       const file = event.target.files[0];
@@ -404,6 +400,8 @@ export default {
     getAllCities().then(response => {
       this.cities = response.data['data']['cities'];
     });
-  }
+  },
+
+
 };
 </script>
