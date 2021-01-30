@@ -27,7 +27,7 @@
           <div class="error" v-if="!$v.formData.description.required">Description field is required</div>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group" v-if="false">
         <label for="logo">Logo </label>
         <br/>
         <input id="logo" type="file" :class="hasError('logo') ? 'is-invalid' : ''" @change="onFileChanged">
@@ -153,11 +153,11 @@
       </div>
 
       <div class="form-group" style="padding-top: 40px;">
-        <div  class="alert alert-success" role="alert" v-if="isPlayerSuccess">
+        <div class="alert alert-success" role="alert" v-if="isPlayerSuccess">
           The player has been successfully saved. <a href="#" v-on:click="closeMessage()" class="alert-link">Close</a>
         </div>
         <a type="button" class="btn btn-primary" v-on:click="getAllPlayers()">Show Records</a>
-        <a v-if="!isSaveButton" class="btn btn-primary"  v-on:click="createPlayer()"><b>Player Create</b></a>
+        <a v-if="!isSaveButton" class="btn btn-primary" v-on:click="createPlayer()"><b>Player Create</b></a>
         <table class="table" v-if="isSyncShowRecords">
           <thead>
           <tr>
@@ -186,6 +186,9 @@
       </div>
     </tab-content>
     <tab-content title="Enter New Data Screen">
+      <div class="alert alert-success" role="alert" v-if="isGameSuccess">
+        The Game has been successfully saved. <a href="#" v-on:click="closeGameSuccessMessage()" class="alert-link">Close</a>
+      </div>
       <div class="form-group">
         <label for="actionName">Action Name</label>
         <input
@@ -294,7 +297,8 @@ export default {
       cities: [],
       isSaveButton: false,
       isSyncShowRecords: false,
-      isPlayerSuccess: false
+      isPlayerSuccess: false,
+      isGameSuccess: false
     };
   },
   methods: {
@@ -317,6 +321,7 @@ export default {
       }
       createGame(dto).then(response => {
         console.log(response);
+        this.isGameSuccess = true;
       });
     },
 
@@ -398,8 +403,12 @@ export default {
       this.formData.city = null;
     },
 
-    closeMessage(){
+    closeMessage() {
       this.isPlayerSuccess = false;
+    },
+
+    closeGameSuccessMessage() {
+      this.isGameSuccess = false;
     }
   },
 
