@@ -186,9 +186,6 @@
       </div>
     </tab-content>
     <tab-content title="Enter New Data Screen">
-      <div class="alert alert-success" role="alert" v-if="isGameSuccess">
-        The Game has been successfully saved. <a href="#" v-on:click="closeGameSuccessMessage()" class="alert-link">Close</a>
-      </div>
       <div class="form-group">
         <label for="actionName">Action Name</label>
         <input
@@ -297,8 +294,7 @@ export default {
       cities: [],
       isSaveButton: false,
       isSyncShowRecords: false,
-      isPlayerSuccess: false,
-      isGameSuccess: false
+      isPlayerSuccess: false
     };
   },
   methods: {
@@ -321,11 +317,10 @@ export default {
       }
       createGame(dto).then(response => {
         console.log(response);
-        this.isGameSuccess = true;
+        alert('The Game has been successfully saved.')
+        location.reload();
       });
     },
-
-
     onFileChanged(event) {
       const file = event.target.files[0];
       console.log(file);

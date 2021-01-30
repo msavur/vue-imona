@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <StepFormValidation></StepFormValidation>
+    <WizardForm></WizardForm>
   </div>
 </template>
 
 <script>
-import StepFormValidation from "./components/StepFormValidation.vue";
+import WizardForm from "./components/WizardForm.vue";
 
 export default {
   name: "App",
   components: {
-    StepFormValidation
-  },
+    WizardForm
+  }
 };
 </script>
 
